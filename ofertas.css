@@ -1,0 +1,162 @@
+/* Contenedor principal */
+.gta-premium-offers {
+  width: 100%;
+  background: linear-gradient(135deg, #111, #222);
+  color: #fff;
+  padding: 80px 20px;
+  font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+}
+
+.gta-premium-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.gta-premium-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: #ff8800;
+  text-shadow: 0 0 15px #ff8800, 0 0 30px rgba(255,136,0,0.3);
+}
+
+.gta-premium-header p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+/* Contenedor bloques */
+.gta-premium-container {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  width: 100%;
+}
+
+/* Bloque premium */
+.premium-offer-block {
+  position: relative;
+  perspective: 1500px;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 1s ease-out;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px; /* limita ancho en PC */
+  margin: 0 auto;
+}
+
+.premium-offer-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.premium-offer-block.reverse {
+  flex-direction: row-reverse;
+}
+
+/* Imagen con overlay */
+.premium-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  flex: 1;
+  width: 100%;
+}
+
+.premium-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: scale(1);
+  transition: transform 1s ease, filter 1s ease;
+}
+
+.premium-image:hover img {
+  transform: scale(1.05) rotateY(-5deg);
+  filter: brightness(1.2);
+}
+
+/* Overlay GTA */
+.offer-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 20px;
+  width: 100%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+  color: #fff;
+  text-align: left;
+}
+
+.offer-overlay h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: #ff8800;
+  margin-bottom: 5px;
+}
+
+.offer-overlay .old-price {
+  text-decoration: line-through;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+.offer-overlay .new-price {
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 15px #ff8800, 0 0 30px rgba(255,136,0,0.5);
+  margin-bottom: 10px;
+}
+
+.offer-overlay button {
+  padding: 12px 25px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #000;
+  background: #ff8800;
+  transition: all 0.3s;
+}
+
+.offer-overlay button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px #ff8800, 0 6px 25px rgba(255,136,0,0.5);
+}
+
+/* Responsive: tablets y móviles */
+@media(max-width:1024px){
+  .premium-image img {
+    max-width: 95%;
+  }
+  .offer-overlay {
+    text-align: center;
+    padding: 15px;
+  }
+  .offer-overlay h3 { font-size: 1.8rem; }
+  .offer-overlay .new-price { font-size: 1.5rem; }
+  .premium-offer-block {
+    flex-direction: column !important;
+    align-items: center;
+  }
+  .premium-offer-block.reverse {
+    flex-direction: column !important;
+  }
+}
+
+@media(max-width:768px){
+  .gta-premium-offers {
+    padding: 60px 15px;
+  }
+  .premium-image img {
+    max-width: 100%;
+  }
+  .offer-overlay h3 { font-size: 1.5rem; }
+  .offer-overlay .new-price { font-size: 1.3rem; }
+  .offer-overlay .old-price { font-size: 1rem; }
+}

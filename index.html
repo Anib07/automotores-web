@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SuperCars Premium</title>
+<link rel="stylesheet" href="productos.css">
+<link rel="stylesheet" href="marcas.css">
+<link rel="stylesheet" href="nosotros.css">
+<link rel="stylesheet" href="contacto.css">
+<link rel="stylesheet" href="ofertas.css">
+<!-- Fuentes y librerías -->
+ 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; font-family: 'Arial', sans-serif; background:#000; }
+
+  /* HEADER PREMIUM */
+  header {
+    position: fixed;
+    top:0; left:0;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 50px;
+    background: rgba(0,0,0,0.6);
+    box-shadow: 0 0 30px rgba(255,165,0,0.5);
+    border-bottom: 1px solid rgba(255,165,0,0.3);
+    backdrop-filter: blur(10px);
+    z-index:1000;
+    animation: headerGlow 2s infinite alternate;
+  }
+
+  header .logo {
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  header .logo img {
+    width:50px;
+    height:50px;
+    object-fit:contain;
+    filter: drop-shadow(0 0 8px #ffa500);
+  }
+  header .logo span {
+    font-family: 'Playfair Display', serif;
+    font-weight:700;
+    font-size:2rem;
+    color:#fff;
+    text-shadow: 0 0 10px #ffa500, 0 0 20px #ffbb33;
+  }
+
+  /* Nav premium */
+  .nav-links {
+    display:flex;
+    align-items:center;
+    gap:25px;
+  }
+  .nav-links a {
+    font-family: 'Playfair Display', serif;
+    font-weight:600;
+    color:#fff;
+    text-decoration:none;
+    position:relative;
+    transition:0.3s;
+  }
+  .nav-links a::after {
+    content:'';
+    position:absolute;
+    bottom:-5px;
+    left:0;
+    width:0;
+    height:2px;
+    background:#ffa500;
+    transition:0.3s;
+  }
+  .nav-links a:hover::after { width:100%; }
+  .nav-links a:hover {
+    color:#ffa500;
+    text-shadow:0 0 15px #ffa500, 0 0 25px #ffbb33;
+  }
+  .nav-links i {
+    font-size:24px;
+    color:#ffa500;
+    transition:0.3s;
+  }
+  .nav-links i:hover {
+    transform:scale(1.2);
+    text-shadow:0 0 10px #ffa500,0 0 20px #ffbb33;
+  }
+
+  /* Menu hamburguesa */
+  .menu-toggle {
+    display:none;
+    font-size:28px;
+    color:#ffa500;
+    cursor:pointer;
+    transition:0.3s;
+  }
+  .menu-toggle:hover {
+    transform:scale(1.2);
+    text-shadow:0 0 10px #ffa500,0 0 20px #ffbb33;
+  }
+
+  /* ANIMACIÓN HEADER */
+  @keyframes headerGlow {
+    0% { box-shadow: 0 0 20px rgba(255,140,0,0.3); }
+    100% { box-shadow: 0 0 35px rgba(255,200,0,0.7); }
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    width:100%;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+  }
+  .hero video {
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    z-index:0;
+    filter: brightness(0.6);
+  }
+  .hero::after {
+    content:'';
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+    z-index:1;
+  }
+
+  /* CONTENIDO HERO */
+  .content {
+    position:relative;
+    text-align:center;
+    z-index:2;
+    max-width:90%;
+    padding: 0 20px;
+    animation: fadeIn 2s ease forwards;
+  }
+  .content h1 {
+    font-size:4rem;
+    margin-bottom:20px;
+    color:#fff;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    text-shadow: 0 0 10px #ff8800, 0 0 20px #ffa500, 0 2px 10px rgba(0,0,0,0.7);
+  }
+  .content p {
+    font-size:1.5rem;
+    margin-bottom:30px;
+    color:#fff;
+    text-shadow: 0 0 8px #ffa500, 1px 1px 6px rgba(0,0,0,0.6);
+  }
+  .content button {
+    padding:15px 40px;
+    font-size:1.2rem;
+    font-weight:bold;
+    color:#fff;
+    background: linear-gradient(145deg, #b35400, #000);
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    box-shadow: 0 5px 15px rgba(255,140,0,0.5), 0 0 20px rgba(255,165,0,0.4);
+    transition:0.3s;
+    text-shadow:1px 1px 4px rgba(0,0,0,0.7);
+  }
+  .content button:hover {
+    background: linear-gradient(145deg, #ff8800, #222);
+    box-shadow: 0 8px 25px rgba(255,165,0,0.7), 0 0 30px rgba(255,200,0,0.6);
+    transform: scale(1.1);
+  }
+
+  @keyframes fadeIn {0%{opacity:0;}100%{opacity:1;}}
+
+  /* FOOTER */
+  footer {
+    background:#000;
+    color:#fff;
+    text-align:center;
+    padding:20px;
+  }
+
+  /* RESPONSIVE */
+  @media(max-width:768px){
+    header {
+      padding:15px 20px;
+    }
+    header .logo span {
+      font-size:1.5rem;
+    }
+    .nav-links {
+      position:fixed;
+      top:0; right:-100%;
+      height:100vh;
+      width:250px;
+      background: rgba(0,0,0,0.95);
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:40px;
+      transition:0.3s;
+      z-index:1000;
+    }
+    .nav-links.show { right:0; }
+    .menu-toggle { display:block; }
+  }
+  /* Fondo oscuro con blur sutil */
+#adminModal {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:1001;
+}
+
+.modal-backdrop {
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+}
+
+/* Contenedor del modal */
+.modal-container {
+  position: relative;
+  background: #111;
+  border-radius: 18px;
+  padding: 40px 30px;
+  width: 360px;
+  max-width: 90%;
+  z-index: 2;
+  text-align: center;
+  box-shadow: 0 0 15px #ff8800, 0 8px 25px rgba(255,136,0,0.3);
+  border: 2px solid #ff8800;
+  animation: modalFadeIn 0.4s ease forwards;
+  font-family: 'Playfair Display', serif;
+  color: #fff;
+}
+
+.modal-container h2 {
+  font-size: 2rem;
+  margin-bottom: 25px;
+  color: #ff8800;
+  letter-spacing: 1px;
+}
+
+.modal-container input {
+  width: 85%;
+  padding: 12px 15px;
+  margin: 12px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: #222;
+  color: #fff;
+  box-shadow: inset 0 0 5px rgba(255,136,0,0.5);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.modal-container input::placeholder {
+  color: rgba(255,136,0,0.7);
+}
+
+.modal-container input:focus {
+  box-shadow: 0 0 10px #ff8800 inset;
+  background: #1a1a1a;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-buttons button {
+  padding: 12px 25px;
+  border-radius: 12px;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:1rem;
+  color:#fff;
+  transition:0.3s;
+}
+
+#loginBtn {
+  background: #ff8800;
+  text-shadow: 0 0 6px #fff;
+}
+#loginBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ff8800, 0 6px 15px rgba(255,136,0,0.4);
+}
+
+#closeModal {
+  background: #333;
+  border: 1px solid #ff8800;
+}
+#closeModal:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #ff8800, 0 6px 12px rgba(255,136,0,0.4);
+}
+
+@keyframes modalFadeIn {
+  0% { transform: translateY(-40px) scale(0.9); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@media(max-width:480px){
+  .modal-container { padding: 30px 20px; width: 90%; }
+  .modal-container h2 { font-size:1.7rem; }
+  .modal-buttons { flex-direction: column; gap:10px; }
+}
+.carousel {
+  perspective: 1200px;
+  width: 100%;
+  height: 500px;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.carousel-track {
+  display: flex;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.carousel-item {
+  width: 250px;
+  height: 400px;
+  background: #111;
+  border: 2px solid #ff8800;
+  border-radius: 20px;
+  margin: 0 15px;
+  padding: 15px;
+  box-shadow: 0 0 15px #ff8800, 0 8px 25px rgba(255,136,0,0.3);
+  text-align: center;
+  transition: transform 0.5s, box-shadow 0.5s;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+.carousel-item h3 {
+  color: #ff8800;
+  margin-bottom: 8px;
+  font-family:'Playfair Display', serif;
+}
+
+.carousel-item .price {
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.carousel-item button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  background: #ff8800;
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.carousel-item button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #ff8800;
+}
+/* Cards inicialmente invisibles y desplazadas */
+.card {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+/* Cuando estén visibles */
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.menu-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #ffa500;
+  display: none; /* solo visible cuando el menú está abierto */
+  z-index: 1001;
+}
+
+.nav-links.show .menu-close {
+  display: block;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="https://i.pinimg.com/736x/1b/8f/ed/1b8fed94e491026244963a3bb3e4c88c.jpg" alt="Logo SuperCars">
+    <span>SuperCars</span>
+  </div>
+
+  <!-- Menu hamburguesa -->
+<div class="menu-toggle" id="menuToggle">
+  <i class="fas fa-bars"></i>
+</div>
+
+<nav class="nav-links" id="navLinks">
+  <!-- Botón de cierre interno: siempre son tres rayitas -->
+  <div id="closeMenu" class="menu-close">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <a href="#">Inicio</a>
+  <a href="#">Modelos</a>
+  <a href="#">Contacto</a>
+  <a href="#" id="adminIcon" title="Login Admin">
+    <i class="fas fa-user-shield"></i>
+  </a>
+</nav>
+
+
+
+  </nav>
+</header>
+
+<section class="hero">
+  <video autoplay muted loop playsinline>
+    <source src="videos/videocar1.mp4" type="video/mp4">
+    Tu navegador no soporta video.
+  </video>
+
+  <div class="content">
+    <h1>Super Car 4K</h1>
+    <p>Velocidad, lujo y tecnología en cada detalle</p>
+    <button href="#" id="heroBtn">Ver Modelos</button>
+  </div>
+</section>
+
+
+<section class="gta-premium-offers">
+  <div class="gta-premium-header">
+    <h2>Ofertas Exclusivas</h2>
+    <p>Los autos más codiciados con descuentos únicos. ¡Aprovechá antes que se agoten!</p>
+  </div>
+
+  <div class="gta-premium-container">
+    <!-- Bloque 1 -->
+    <div class="premium-offer-block">
+      <div class="premium-image">
+        <img src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZmVycmFyaXxlbnwwfHwwfHx8MA%3D%3D" alt="Ferrari">
+        <div class="offer-overlay">
+          <h3>Ferrari F8</h3>
+          <p class="old-price">$350,000</p>
+          <p class="new-price">$299,999</p>
+          <button>Comprar ahora</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloque 2 -->
+    <div class="premium-offer-block reverse">
+      <div class="premium-image">
+        <img src="https://images.unsplash.com/photo-1630312465536-5c6b1f76dc3f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bGFtYm9yZ2hpbml8ZW58MHx8MHx8fDA%3D" alt="Lamborghini">
+        <div class="offer-overlay">
+          <h3>Lamborghini Huracán</h3>
+          <p class="old-price">$400,000</p>
+          <p class="new-price">$349,999</p>
+          <button>Comprar ahora</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloque 3 -->
+    <div class="premium-offer-block">
+      <div class="premium-image">
+        <img src="https://images.unsplash.com/photo-1654449174961-b0a363a92c81?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHBvcnNoZXxlbnwwfHwwfHx8MA%3D%3D" alt="Porsche">
+        <div class="offer-overlay">
+          <h3>Porsche 911 Turbo</h3>
+          <p class="old-price">$250,000</p>
+          <p class="new-price">$219,999</p>
+          <button>Comprar ahora</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="brands-section">
+  <div class="brands-header">
+    <h2>Marcas con las que trabajamos</h2>
+    <p>Colaboramos con las mejores marcas del mercado para ofrecerte calidad y confianza en cada producto.</p>
+  </div>
+
+  <div class="brands-carousel">
+    <div class="brands-track">
+      <div class="brand-card"><img src="img/ferrari.png" alt="Ferrari"><h3>Ferrari</h3></div>
+      <div class="brand-card"><img src="img/lamborgini.webp" alt="Lamborghini"><h3>Lamborghini</h3></div>
+      <div class="brand-card"><img src="img/porshe.png" alt="Porsche"><h3>Porsche</h3></div>
+      <div class="brand-card"><img src="img/mercedes.png" alt="Mercedes"><h3>Mercedes</h3></div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="products-section" id="productoss">
+  <div class="section-divider"></div>
+  <h2>Nuestros Vehículos</h2>
+  <p>Explorá todos los modelos de lujo que tenemos para vos.</p>
+
+  <!-- FILTROS PUBLICOS -->
+ <!-- FILTROS PUBLICOS -->
+<div class="public-filters">
+  <input type="text" id="searchInput" placeholder="Buscar por marca, modelo o tipo...">
+  <select id="filterBrand"><option value="">Marca</option></select>
+  <select id="filterModel"><option value="">Modelo</option></select>
+  <select id="filterType"><option value="">Tipo</option></select>
+  <select id="filterYear"><option value="">Año</option></select>
+  <select id="filterCondition"><option value="">Condición</option></select> <!-- NUEVO -->
+</div>
+
+
+
+  <div class="cards" id="publicCarsContainer"></div>
+  </div>
+</section>
+
+<section class="about-section">
+
+  <!-- Bloque 1: Texto izquierda / Imagen derecha -->
+  <div class="about-block">
+    <div class="about-text">
+      <h2>Quiénes somos</h2>
+      <h3>Pasión por los autos de lujo</h3>
+      <p>
+        Somos una empresa dedicada a ofrecer autos de alta gama. Nuestra filosofía es brindar 
+        calidad, confianza y exclusividad a cada cliente. Con años de experiencia en el mercado, 
+        cuidamos cada detalle para que tu experiencia sea única.
+      </p>
+      <div class="icons">
+        <i class="fas fa-shield-alt"></i>
+        <i class="fas fa-car-side"></i>
+      </div>
+    </div>
+    <div class="about-image">
+      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Equipo y auto destacado">
+    </div>
+  </div>
+
+  <!-- Bloque 2: Imagen izquierda / Texto derecha -->
+  <div class="about-block reverse">
+    <div class="about-image">
+      <img src="https://plus.unsplash.com/premium_photo-1683133974170-762dc561d292?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Showroom de autos">
+    </div>
+    <div class="about-text">
+      <h2>Nuestra misión</h2>
+      <h3>Excelencia y atención personalizada</h3>
+      <p>
+        Nos esforzamos por ofrecer un servicio premium, cuidando cada detalle del auto y 
+        brindando atención personalizada. Queremos que cada cliente viva la experiencia de 
+        conducir un auto de lujo de manera inolvidable.
+      </p>
+      
+    </div>
+  </div>
+
+</section>
+
+<section class="contact-section">
+  <div class="contact-header fade-in">
+    <h2>Contáctanos</h2>
+    <p>Completá el formulario y nuestro equipo te responderá en breve</p>
+  </div>
+
+  <div class="contact-container">
+    <!-- Formulario -->
+    <form class="contact-form fade-in">
+      <input type="text" placeholder="Nombre completo" required>
+      <input type="email" placeholder="Correo electrónico" required>
+      <input type="tel" placeholder="Teléfono">
+      <textarea placeholder="Escribí tu mensaje..." required></textarea>
+      <button type="submit">Enviar mensaje</button>
+    </form>
+
+    <!-- Info + Mapa -->
+    <div class="contact-info fade-in">
+      <!-- Datos -->
+      <div class="info-block">
+        <i class="fas fa-map-marker-alt"></i>
+        <p>Av. Principal 123, Ciudad, País</p>
+      </div>
+      <div class="info-block">
+        <i class="fas fa-phone-alt"></i>
+        <p>+595 123 456 789</p>
+      </div>
+      <div class="info-block">
+        <i class="fas fa-envelope"></i>
+        <p>contacto@supercars.com</p>
+      </div>
+
+      <!-- Redes sociales premium -->
+      <div class="social-icons fade-in">
+        <a href="#" target="_blank" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" target="_blank" class="facebook"><i class="fab fa-facebook-f"></i></a>
+      </div>
+
+      <!-- Título mapa -->
+      <h3 class="map-title fade-in">Dónde encontrarnos</h3>
+
+      <!-- Mapa -->
+      <div class="map-container fade-in">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.324682123456!2d-58.445678!3d-25.263456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da123456789ab%3A0xabcdef123456789!2sSuperCars%20Showroom!5e0!3m2!1ses!2spy!4v1700000000000!5m2!1ses!2spy" 
+          width="100%" 
+          height="300" 
+          style="border:0; border-radius:15px;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- Modal Admin -->
+<div id="adminModal" style="display:none;">
+  <div class="modal-backdrop"></div>
+  <div class="modal-container">
+    <h2>Admin Login</h2>
+    <input type="text" id="username" placeholder="Usuario">
+    <input type="password" id="password" placeholder="Contraseña">
+    <div class="modal-buttons">
+      <button id="loginBtn">Ingresar</button>
+      <button id="closeModal">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Información Auto -->
+<div class="modal" id="carInfoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:1000;">
+  <div class="modal-content" style="background:#111; border:2px solid #ff8800; border-radius:15px; padding:30px; width:360px; max-height:90vh; overflow-y:auto; text-align:center;">
+    <span class="close-modal" style="position:absolute; top:10px; right:15px; font-size:1.5rem; cursor:pointer; color:#ff8800;">&times;</span>
+    <h2 id="infoTitle" style="color:#ff8800; margin-bottom:15px;"></h2>
+    <p id="infoDesc" style="color:#fff; text-align:left; margin-bottom:10px;"></p>
+  </div>
+</div>
+
+
+<!-- Modal Imagen Grande -->
+<div id="imageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; justify-content:center; align-items:center; z-index:3000;">
+  <div class="backdrop" style="position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9);"></div>
+  <img src="" alt="Imagen del auto" style="max-width:90%; max-height:80%; border-radius:15px; box-shadow:0 0 25px #ff8800;">
+</div>
+
+
+<script>
+  // Elementos del menú
+  const menuToggle = document.getElementById('menuToggle'); // Botón del header
+  const navLinks = document.getElementById('navLinks');     // Contenedor de links
+  const menuIcon = menuToggle.querySelector('i');          // Icono del header
+  const closeMenu = document.getElementById('closeMenu');  // Botón interno dentro del menú
+  const navItems = navLinks.querySelectorAll('a');         // Todos los enlaces del menú
+
+  // Abrir/cerrar menú desde el botón del header
+  menuToggle.addEventListener('click', () => { 
+    navLinks.classList.toggle('show'); 
+
+    // Cambiar icono header a X
+    if(navLinks.classList.contains('show')){
+      menuIcon.classList.remove('fa-bars');
+      menuIcon.classList.add('fa-times');
+    } else {
+      menuIcon.classList.remove('fa-times');
+      menuIcon.classList.add('fa-bars');
+    }
+  });
+
+  // Cerrar menú al hacer clic en cualquier enlace
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navLinks.classList.remove('show');
+      menuIcon.classList.remove('fa-times');
+      menuIcon.classList.add('fa-bars');
+    });
+  });
+
+  // Cerrar menú al hacer clic fuera del menú
+  document.addEventListener('click', (e) => {
+    if(navLinks.classList.contains('show') && 
+       !navLinks.contains(e.target) && 
+       !menuToggle.contains(e.target)){
+      navLinks.classList.remove('show');
+      menuIcon.classList.remove('fa-times');
+      menuIcon.classList.add('fa-bars');
+    }
+  });
+
+  // Cerrar menú desde el botón interno dentro del menú
+  closeMenu.addEventListener('click', () => {
+    navLinks.classList.remove('show');
+    menuIcon.classList.remove('fa-times');
+    menuIcon.classList.add('fa-bars');
+  });
+  document.getElementById('heroBtn').addEventListener('click', () => {
+  document.getElementById('productoss').scrollIntoView({ behavior: 'smooth' });
+});
+
+</script>
+
+
+
+<script  src="productos.js"></script>
+<script  src="marcas.js"></script>
+<script  src="nosotros.js"></script>
+<script  src="contacto.js"></script>
+<script  src="ofertas.js"></script>
+<footer>
+  &copy; 2025 SuperCars. Todos los derechos reservados.
+</footer>
+</body>
+</html>

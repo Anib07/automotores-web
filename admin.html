@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin SuperCars</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Arial', sans-serif;}
+body { background:#000; color:#fff; min-height:100vh; }
+header { display:flex; justify-content:space-between; align-items:center; padding:20px 40px; background:#111; border-bottom:2px solid #ff8800; box-shadow: 0 0 15px #ff8800; position: fixed; top:0; left:0; width:100%; backdrop-filter: blur(10px); z-index:1000; }
+header h1 { font-family:'Playfair Display', serif; color:#ff8800; }
+header nav a { color: #fff; margin-left: 20px; text-decoration: none; font-weight: bold; font-size: 1rem; display: inline-flex; align-items: center; gap: 5px; text-shadow: 0 0 5px #ff8800, 0 0 10px #ffbb33; transition: 0.3s; }
+header nav a:hover { color: #ff8800; text-shadow: 0 0 10px #ff8800, 0 0 20px #ffbb33, 0 0 30px #ffa500; }
+header .logo { display:flex; align-items:center; gap:10px; }
+header .logo img { width:50px; height:50px; object-fit:contain; filter: drop-shadow(0 0 8px #ffa500); }
+header .logo span { font-family: 'Playfair Display', serif; font-weight:700; font-size:2rem; color:#fff; text-shadow: 0 0 10px #ffa500, 0 0 20px #ffbb33; }
+.container { padding:30px 40px; }
+.actions { display:flex; justify-content:flex-start; gap:15px; margin-bottom:15px; flex-wrap:wrap; }
+.actions button { background:#ff8800; border:none; padding:10px 20px; color:#000; font-weight:bold; border-radius:8px; cursor:pointer; transition:0.3s; }
+.actions button:hover { transform:scale(1.05); box-shadow:0 0 15px #ff8800;}
+.filter { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:25px; }
+.filter select { flex:1; padding:8px; border-radius:8px; border:none; background:#222; color:#fff; cursor:pointer; }
+.cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:25px; }
+.card { background:#111; border:2px solid #ff8800; border-radius:15px; overflow:hidden; box-shadow:0 0 10px #ff8800, 0 4px 15px rgba(255,136,0,0.3); transition:0.3s; display:flex; flex-direction:column; }
+.card:hover { transform:translateY(-5px); box-shadow:0 0 20px #ff8800, 0 8px 20px rgba(255,136,0,0.5);}
+.card img { width:100%; height:180px; object-fit:cover; }
+.card-content { padding:15px; flex-grow:1; display:flex; flex-direction:column; justify-content:space-between; }
+.card-content h3 { color:#ff8800; margin-bottom:5px; font-family:'Playfair Display', serif; }
+.card-content p { font-size:0.9rem; margin-bottom:8px; color:#fff; }
+.price { font-weight:bold; font-size:1rem; color:#fff; margin-bottom:10px; }
+.card-buttons { display:flex; justify-content:space-between; gap:10px; }
+.card-buttons button { flex:1; padding:8px 0; border:none; border-radius:8px; cursor:pointer; font-weight:bold; transition:0.3s; }
+.edit-btn { background:#222; border:1px solid #ff8800; color:#ff8800; }
+.edit-btn:hover { background:#ff8800; color:#000; }
+.delete-btn { background:#ff0000; color:#fff; }
+.delete-btn:hover { background:#ff8800; color:#000; }
+
+/* Modal */
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:1000; }
+.modal-content { background:#111; border:2px solid #ff8800; border-radius:15px; padding:30px; width:360px; text-align:center; box-shadow:0 0 15px #ff8800; max-height:90vh; overflow-y:auto; }
+.modal-content input, .modal-content select, .modal-content textarea { width:85%; margin:10px 0; padding:10px; border-radius:8px; border:none; background:#222; color:#fff; outline:none; text-align:center; }
+.modal-content input::placeholder, .modal-content textarea::placeholder { color:rgba(255,136,0,0.7); }
+.modal-content textarea { resize: vertical; height:80px; text-align:left; padding:10px;} /* NUEVO */
+.modal-buttons { display:flex; justify-content:space-between; gap:10px; margin-top:15px; }
+.modal-buttons button { flex:1; padding:10px 0; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
+.save-btn { background:#ff8800; color:#000; }
+.cancel-btn { background:#333; border:1px solid #ff8800; color:#ff8800; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="https://i.pinimg.com/736x/1b/8f/ed/1b8fed94e491026244963a3bb3e4c88c.jpg" alt="Logo SuperCars">
+    <span>SuperCars</span>
+  </div>
+  <nav>
+    <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Salir</a>
+  </nav>
+</header>
+<br><br>
+<div class="container">
+  <div class="actions">
+    <button id="addCarBtn"><i class="fas fa-plus"></i> Agregar Vehículo</button>
+    <button id="resetFilterBtn"><i class="fas fa-rotate-right"></i> Mostrar Todos</button>
+  </div>
+
+  <div class="filter">
+    <select id="filterBrand"><option value="">Marca</option></select>
+    <select id="filterModel"><option value="">Modelo</option></select>
+    <select id="filterType"><option value="">Tipo</option></select>
+    <select id="filterYear"><option value="">Año</option></select>
+    <select id="filterCondition"><option value="">Condición</option></select>
+  </div>
+
+  <div class="cards" id="cardsContainer"></div>
+</div>
+
+<!-- Modal Agregar/Editar -->
+<div class="modal" id="modalForm">
+  <div class="modal-content">
+    <h2 id="modalTitle">Agregar Vehículo</h2>
+
+    <input type="text" id="carBrand" placeholder="Marca">
+    <input type="text" id="carModel" placeholder="Modelo">
+    <input type="text" id="carType" placeholder="Tipo">
+    <select id="carCondition">
+      <option value="">Condición</option>
+      <option value="Nuevo">Nuevo</option>
+      <option value="Seminuevo">Seminuevo</option>
+      <option value="Usado">Usado</option>
+    </select>
+    <input type="number" id="carYear" placeholder="Año">
+    <input type="number" id="carPrice" placeholder="Precio (Gs)">
+    <input type="text" id="carDesc" placeholder="Descripción corta">
+    <input type="text" id="carColors" placeholder="Colores disponibles">
+    <input type="file" id="carFiles" accept="image/*" multiple>
+    <input type="url" id="carImg" placeholder="URL de imagen principal">
+    <textarea id="carFullInfo" placeholder="Información completa del vehículo (garantía, motor, extras...)"></textarea> <!-- NUEVO -->
+
+    <div class="modal-buttons">
+      <button class="save-btn" id="saveCar">Guardar</button>
+      <button class="cancel-btn" id="cancelCar">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Logout -->
+<!-- Modal Logout -->
+<div class="modal" id="modalLogout">
+  <div class="modal-content">
+    <h2>¿Estás seguro de cerrar sesión?</h2>
+    <div class="modal-buttons">
+      <button class="save-btn" id="confirmLogout">Sí</button>
+      <button class="cancel-btn" id="cancelLogout">No</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const cardsContainer = document.getElementById('cardsContainer');
+const modal = document.getElementById('modalForm');
+const addCarBtn = document.getElementById('addCarBtn');
+const cancelCar = document.getElementById('cancelCar');
+const saveCar = document.getElementById('saveCar');
+const modalTitle = document.getElementById('modalTitle');
+
+const carBrand = document.getElementById('carBrand');
+const carModel = document.getElementById('carModel');
+const carType = document.getElementById('carType');
+const carYear = document.getElementById('carYear');
+const carPrice = document.getElementById('carPrice');
+const carDesc = document.getElementById('carDesc');
+const carColors = document.getElementById('carColors');
+const carImg = document.getElementById('carImg');
+const carFiles = document.getElementById('carFiles');
+const carCondition = document.getElementById('carCondition');
+const carFullInfo = document.getElementById('carFullInfo'); // NUEVO
+
+const filterBrand = document.getElementById('filterBrand');
+const filterModel = document.getElementById('filterModel');
+const filterType = document.getElementById('filterType');
+const filterYear = document.getElementById('filterYear');
+const filterCondition = document.getElementById('filterCondition');
+
+let cars = JSON.parse(localStorage.getItem('adminCars')) || [];
+cars = cars.map(car => { if(!car.images) car.images = [car.img || '']; if(!car.colors) car.colors=''; if(!car.fullInfo) car.fullInfo=''; return car; });
+let editIndex = null;
+
+function renderCars(){
+  const brandVal = filterBrand.value;
+  const modelVal = filterModel.value;
+  const typeVal = filterType.value;
+  const yearVal = filterYear.value;
+  const conditionVal = filterCondition.value;
+
+  cardsContainer.innerHTML = "";
+
+  const filteredCars = cars.filter(car=>{
+    return (!brandVal || car.brand===brandVal) &&
+           (!modelVal || car.model===modelVal) &&
+           (!typeVal || car.type===typeVal) &&
+           (!yearVal || car.year==yearVal) &&
+           (!conditionVal || car.condition===conditionVal);
+  });
+
+  filteredCars.forEach((car,index)=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    const carouselId = `carousel-${index}`;
+    card.innerHTML = `
+      <div class="card-carousel" id="${carouselId}" style="position:relative;">
+        <img src="${car.images[0] || car.img}" alt="${car.brand} ${car.model}" style="width:100%; height:180px; object-fit:cover; border-bottom:2px solid #ff8800;">
+        ${car.images.length>1?`
+          <button class="prev-btn" style="position:absolute; top:50%; left:5px; transform:translateY(-50%); background:#ff8800; color:#000; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer;">&#10094;</button>
+          <button class="next-btn" style="position:absolute; top:50%; right:5px; transform:translateY(-50%); background:#ff8800; color:#000; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer;">&#10095;</button>
+        `: '' }
+      </div>
+      <div class="card-content">
+        <h3>${car.brand} ${car.model} (${car.year})</h3>
+        <p>Tipo: ${car.type}</p>
+        <p>Condición: ${car.condition}</p>
+        <p>Colores: ${car.colors || 'N/A'}</p>
+        <p class="price">${car.price.toLocaleString('es-PY')} Gs</p>
+        <p>${car.desc}</p>
+        <div class="card-buttons">
+          <button class="edit-btn" onclick="editCar(${cars.indexOf(car)})"><i class="fas fa-edit"></i> Editar</button>
+          <button class="delete-btn" onclick="deleteCar(${cars.indexOf(car)})"><i class="fas fa-trash"></i> Borrar</button>
+        </div>
+      </div>
+    `;
+    cardsContainer.appendChild(card);
+
+    if(car.images.length>1){
+      const carouselImg = card.querySelector('img');
+      let imgIndex=0;
+      const prevBtn = card.querySelector('.prev-btn');
+      const nextBtn = card.querySelector('.next-btn');
+      prevBtn.addEventListener('click',()=>{ imgIndex=(imgIndex-1+car.images.length)%car.images.length; carouselImg.src=car.images[imgIndex]; });
+      nextBtn.addEventListener('click',()=>{ imgIndex=(imgIndex+1)%car.images.length; carouselImg.src=car.images[imgIndex]; });
+    }
+  });
+  updateFilterOptions();
+}
+
+function updateFilterOptions(){
+  const brands = [...new Set(cars.map(c=>c.brand))];
+  const models = [...new Set(cars.filter(c=>!filterBrand.value||c.brand===filterBrand.value).map(c=>c.model))];
+  const types = [...new Set(cars.map(c=>c.type))];
+  const years = [...new Set(cars.map(c=>c.year))].sort((a,b)=>b-a);
+  const conditions = [...new Set(cars.map(c=>c.condition))];
+
+  populateSelect(filterBrand, brands, "Marca");
+  populateSelect(filterModel, models, "Modelo");
+  populateSelect(filterType, types, "Tipo");
+  populateSelect(filterYear, years, "Año");
+  populateSelect(filterCondition, conditions, "Condición");
+}
+
+function populateSelect(select, options, placeholder){
+  const currentValue = select.value;
+  select.innerHTML = `<option value="">${placeholder}</option>`;
+  options.forEach(o=>{
+    const opt = document.createElement('option');
+    opt.value=o;
+    opt.textContent=o;
+    select.appendChild(opt);
+  });
+  if(options.includes(currentValue)) select.value=currentValue;
+}
+
+function editCar(index){
+  editIndex=index;
+  modalTitle.textContent="Editar Vehículo";
+  const car=cars[index];
+  carBrand.value=car.brand;
+  carModel.value=car.model;
+  carType.value=car.type;
+  carYear.value=car.year;
+  carPrice.value=car.price;
+  carDesc.value=car.desc;
+  carColors.value=car.colors || '';
+  carImg.value=car.img || '';
+  carFiles.value='';
+  carCondition.value=car.condition || '';
+  carFullInfo.value = car.fullInfo || ''; // NUEVO
+  modal.style.display="flex";
+}
+
+function deleteCar(index){
+  if(confirm("¿Seguro que quieres eliminar este vehículo?")){
+    cars.splice(index,1);
+    saveToStorage();
+    renderCars();
+  }
+}
+
+addCarBtn.addEventListener("click",()=>{
+  editIndex=null;
+  modalTitle.textContent="Agregar Vehículo";
+  carBrand.value="";
+  carModel.value="";
+  carType.value="";
+  carYear.value="";
+  carPrice.value="";
+  carDesc.value="";
+  carColors.value="";
+  carImg.value="";
+  carFiles.value="";
+  carCondition.value="";
+  carFullInfo.value = ""; // NUEVO
+  modal.style.display="flex";
+});
+
+cancelCar.addEventListener("click",()=>{ modal.style.display="none"; });
+
+saveCar.addEventListener("click",()=>{
+  const images=[];
+  if(carFiles.files.length>0){
+    let loaded=0;
+    for(let i=0;i<carFiles.files.length;i++){
+      const reader=new FileReader();
+      reader.onload=function(e){ images.push(e.target.result); loaded++; if(loaded===carFiles.files.length) saveCarData(images);}
+      reader.readAsDataURL(carFiles.files[i]);
+    }
+  } else {
+    if(carImg.value) images.push(carImg.value);
+    saveCarData(images);
+  }
+});
+
+function saveCarData(images){
+  const newCar={
+    brand: carBrand.value.trim(),
+    model: carModel.value.trim(),
+    type: carType.value.trim(),
+    condition: carCondition.value,
+    year: Number(carYear.value),
+    price: Number(carPrice.value),
+    desc: carDesc.value.trim(),
+    colors: carColors.value.trim(),
+    img: images[0] || '',
+    images: images,
+    fullInfo: carFullInfo.value.trim() // NUEVO
+  };
+  if(!newCar.brand || !newCar.model || !newCar.type || !newCar.condition || !newCar.year || !newCar.price || !newCar.desc || !newCar.images.length){
+    alert("Completa todos los campos y agrega al menos una imagen, además de seleccionar la condición.");
+    return;
+  }
+  if(editIndex!==null) cars[editIndex]=newCar; else cars.push(newCar);
+  modal.style.display="none";
+  saveToStorage();
+  renderCars();
+}
+
+function saveToStorage(){
+  localStorage.setItem('adminCars', JSON.stringify(cars));
+}
+
+document.getElementById('resetFilterBtn').addEventListener('click',()=>{
+  filterBrand.value=''; filterModel.value=''; filterType.value=''; filterYear.value=''; filterCondition.value='';
+  renderCars();
+});
+
+filterBrand.addEventListener('change',renderCars);
+filterModel.addEventListener('change',renderCars);
+filterType.addEventListener('change',renderCars);
+filterYear.addEventListener('change',renderCars);
+filterCondition.addEventListener('change',renderCars);
+
+renderCars();
+// Ajustar el padding-top del container para que no quede detrás del header
+const headerHeight = document.querySelector('header').offsetHeight;
+document.querySelector('.container').style.paddingTop = `${headerHeight + 20}px`;
+
+// Botón salir con modal de confirmación
+const logoutLink = document.getElementById('logoutLink');
+const modalLogout = document.getElementById('modalLogout');
+const confirmLogout = document.getElementById('confirmLogout');
+const cancelLogout = document.getElementById('cancelLogout');
+
+logoutLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  modalLogout.style.display = 'flex';
+});
+
+cancelLogout.addEventListener('click', () => {
+  modalLogout.style.display = 'none';
+});
+
+confirmLogout.addEventListener('click', () => {
+  modalLogout.style.display = 'none';
+  window.location.href = 'index2.html'; // Redirige si confirma
+});
+</script>
+</body>
+</html>
